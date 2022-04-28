@@ -89,7 +89,7 @@ Damit lassen sich Schwachstellen zwar noch nicht gezielt ausnutzen, ein Testprog
 
 
 
-<img src="Abb4Markdown.PNG" title="" alt="" data-align="center">
+<img src="Abb5Markdown.PNG" title="" alt="" data-align="center">
 
 Abbildung 5 *RowHammer error rate vs. manufacturing dates of 129  
 DRAM modules we tested.* Aus RowHammer: a Retrospektive [[4]](#4) (Die Namen der Hersteller wurden anonymisiert)
