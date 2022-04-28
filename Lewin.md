@@ -16,7 +16,7 @@ Die Schwäche heutiger Speichersysteme gegenüber potentiellen Rowhammer-Angriff
 
 ##### Dynamic Random Acsess Memory - DRAM
 
-DRAM hat viele Vorteile. Er ist schnell, kostet wenig und bleibt dabei konzeptionell eigentlich simpel. Das gilt nicht für die Herstellung, allerdings reicht uns hier eine grobe Idee, der Architektur. [[1]](#1)
+DRAM hat viele Vorteile. Er ist schnell, kostet wenig und bleibt dabei konzeptionell eigentlich simpel. "simpel" in Anführungszeichen, weil das nur im Vergleich zu anderen Speicherbausteinen gilt. DRAM-Herstellung ist natürlich High-Tech, allerdings reicht uns hier eine grobe Idee, der Architektur. [[1]](#1)
 
 Um die Probleme der Speicherbausteine gegen Rowhammer-Angriffe zu verstehen, betrachten wir nachfolgend den theoretischen Aufbau solcher Zellen.
 
