@@ -83,7 +83,11 @@ An Experimental Study of DRAM Disturbance Errors* [[5]](#5)
 
 
 
-In Zeile 1 und 2 werden Registerinhalte in Reihe X und Y gespeichert. Gleich darauf löscht (invalidiert) das Programm in Zeile 4 und 5 die Reihen wieder[[6]](#6) und stellt mit mfence in Zeile 6 sicher,  dass die Speicherzugriffe in der richtigen Reihenfolge ablaufen. In Zeile 7 wird das Programm rekursiv aufgerufen. 
+In Zeile 1 und 2 werden Registerinhalte in Reihe X und Y gespeichert. Gleich darauf löscht (invalidiert) das Programm in Zeile 4 und 5 die Reihen wieder[[6]](#6) und stellt mit mfence in Zeile 6 sicher,  dass die Speicherzugriffe in der richtigen Reihenfolge ablaufen. In Zeile 7 wird das Programm rekursiv aufgerufen.
+
+Der Code ist einfach und noch viel schlimmer: um diesen Code ausführen zu können, sind keine besonderen Rechte notwendig.
+
+Das speichern und flushen in zwei unterschiedlichen Reihen ist ein kleiner Umweg, weil gängiger RAM eine Reihe zwischenspeichert, um diese nicht wiederholt aufrufen zum müssen. [[5]](#5) Ohne den abwechselnden Zugriff auf eine andere Reihe würde das System also nur vordergründig anfragen an die immer gleiche Zeile richten.
 
 Damit lassen sich Schwachstellen zwar noch nicht gezielt ausnutzen, ein Testprogramm von Google [[0]](#0) kommt aber zum Beispiel bereits mit einigen hundert Zeilen Code aus. Aktuelle Systeme lassen sich nicht ganz so einfach austricksen. Wichtig ist uns hier zu zeigen, dass Rowhammer auf einem sehr einfachen Level agiert. 
 
