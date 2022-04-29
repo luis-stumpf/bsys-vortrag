@@ -38,12 +38,11 @@ Praxis:
             Obacht bei Server-Nachbarn
             Obacht bei seltsamen Internet Seiten 
 
-
-
 ## Paper
 
-- https://users.ece.cmu.edu/~yoonguk/papers/kim-isca14.pdf
+- [Flipping Bits in Memory Without Accessing Them:
+  An Experimental Study of DRAM Disturbance Errors](https://users.ece.cmu.edu/~yoonguk/papers/kim-isca14.pdf)
 
 - [Rowhammer memory attacks close in on the real world | InsiderPro](https://www.idginsiderpro.com/article/3529519/rowhammer-memory-attacks-close-in-on-the-real-world.html)
 
-- https://arxiv.org/pdf/2204.10378.pdf
+- [A Case for Transparent Reliability in DRAM Systems](https://arxiv.org/pdf/2204.10378.pdf)
