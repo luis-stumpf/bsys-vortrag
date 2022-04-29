@@ -2,8 +2,6 @@
 
 [Attacke über Microsoft Edge browser](https://download.vusec.net/papers/dedup-est-machina_sp16.pdf)
 
-
-
 Attacke über JavaScript im browser
 
 Fist Solution
@@ -13,10 +11,6 @@ Fist Solution
 Versteckte attacken über Intel Software Fuard Extensions: 
 
 Klauen von SSH Key so keine Entschlüsselung nötig
-
-
-
-
 
 ###### Throw hammer
 
@@ -40,8 +34,6 @@ Schwer duchzuführen
 
 - einbrechen innerhalb von 2 minuten in ein handy
 
-
-
 ###### JackHammer
 
 [[1912.11523] JackHammer: Efficient Rowhammer on Heterogeneous FPGA-CPU Platforms](https://arxiv.org/abs/1912.11523)
@@ -51,8 +43,6 @@ Schwer duchzuführen
 - finden erhöhte nutzung in der cloud
 
 - SLL Service geknackt
-
-
 
 ##### Tatsächliche Attacken wie davor Schützen
 
@@ -67,3 +57,7 @@ Schwer duchzuführen
 - Testen des rams in der Produktion
 
 - Memory refresh rate erhöhen
+
+- Beim cloud service anfrage stellen nach TRR und memory refresh rate 
+
+- wird immer Gefährlicher die nächsten jahre
