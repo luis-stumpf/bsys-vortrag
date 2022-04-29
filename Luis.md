@@ -1,3 +1,26 @@
+Vorschlag von Lewin:
+
+    Grenzen von Rowhammer:
+      Braucht fehlerhafte Bits
+      Keine direkten Angriffe über Netzwerke, da zu langsam (Muss Prozess starten können)
+      Kann nur innerhalb der Refresh-Rate agieren
+
+    Bis jetzt noch kein dokumentierter Hack (But you never know)
+    
+    Mögliche Rowhammer Angriffe
+      - JavaSkript
+      - Attacken über Intel-Software
+      - Throw-Hammer
+      - Handy-Angriff in 2 min
+      - Jackhammer-Cloud-Angriffe 
+      - 
+      
+    Schutz gegen Rowhammer
+      - 
+      -
+      
+      
+      
 ##### Mögliche Arten von Attacken und Schlupflöcher in modernen Systemen
 
 [Attacke über Microsoft Edge browser](https://download.vusec.net/papers/dedup-est-machina_sp16.pdf)
