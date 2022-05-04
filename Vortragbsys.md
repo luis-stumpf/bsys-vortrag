@@ -8,18 +8,9 @@ date: 04.05.2022
 lang: de
 ---
 
-\maketitle
-\thispagestyle{empty}
-\clearpage
-\tableofcontents
-\pagenumbering{roman}
-\clearpage
-\pagenumbering{arabic}
-\setcounter{page}{1}
+
 
 # Rowhammer: Problem ohne Lösung
-
-### 
 
 ### Inhalt
 
