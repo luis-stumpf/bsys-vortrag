@@ -210,7 +210,7 @@ Zudem ist kein bösartiger Rowhammer-Angriff öffentlich bekannt, eine unmittelb
 
 Die denkbar idealste Lösung für das Rowhammer-Problem wäre, schlicht **bessere Chips** zu bauen. Ohne "schwache" Bits oder mit besserer Kontrolle haben Angreifer keinen Hebel. Theoretisch lässt sich RAM auf fehlerhafte Bits überprüfen, welche dann ersetz werden können. Dies macht die Herstellung allerdings wesentlich aufwendiger und daher impraktikabel. [[5]](5) [[11]](11)
 
-Ein gutes Beispiel für eine Lösung ist die bereits in manchen RAM Bausteinen verwendete **ECC-Methode**. Das Error-Corretion-Code-Verfahren verwendet einen Hashwert zur Identifikation von Ein- , Zwei- und teilweise auch Mehr-Bit-Fehlern. Für dieses Verfahren werden 72 statt den üblichen 64 Bits für jede Speicherzelle benötigt.[[17]](17) Da aber auch ECC nicht sämtliche Fehler ausmerzt, bietet es keinen optimalen Schutz. Auch-ECC-Systeme wurden bereits nachweislich mit Rowhammering "geknackt".[[10]](10)
+Ein gutes Beispiel für eine Lösung ist die bereits in manchen RAM Bausteinen verwendete **ECC-Methode**. Das Error-Corretion-Code-Verfahren verwendet einen Hashwert zur Identifikation von Ein- , Zwei- und teilweise auch Mehr-Bit-Fehlern. Für dieses Verfahren werden 72 statt den üblichen 64 Bits für jede Speicherzelle benötigt.[[12]](1) Da aber auch ECC nicht sämtliche Fehler ausmerzt, bietet es keinen optimalen Schutz. Auch-ECC-Systeme wurden bereits nachweislich mit Rowhammering "geknackt".[[10]](10)
 
 Immerhin: Ein bisschen mehr Schutz ist besser als gar keiner. Einfache Rowhammer-Angriffe scheitern schon an DDR4-RAM, ein Upgrade schadet also nie.
 
@@ -263,6 +263,8 @@ id="10">[10] Referenz 10 [Exploiting Correcting Codes: On the Effectiveness of E
 
 id="11">[11] Referenz 11 [Nanoscale Memory Repair | SpringerLink](https://link.springer.com/book/10.1007/978-1-4419-7958-2)
 
+id="12">[12] Referenz 12 [Understanding and Modeling On-Die Error Correction in Modern DRAM: An Experimental Study Using Real Devices | IEEE Conference Publication | IEEE Xplore](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=8809496)
+
 id="14">[14] Referenz 14 [Understanding Reduced-Voltage Operation  
 in Modern DRAM Devices](https://ghose.web.illinois.edu/papers/17sigmetrics_voltron.pdf)
 
@@ -270,5 +272,3 @@ id="15">15 Referenz 15 [Throwhammer: Rowhammer Attacks over the Network and Defe
 
 id="16">16 Referenz 16 [Rowhammer.js: A Remote Software-Induced
 Fault Attack in JavaScript](https://arxiv.org/pdf/1507.06955.pdf)
-
-id="17">17 Referenz 17 [Speichermodul – Wikipedia](https://de.wikipedia.org/wiki/Speichermodul#Fehlererkennung_(ECC)) **Bessere Quelle bitte!!!!**
