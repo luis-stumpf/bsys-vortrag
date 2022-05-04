@@ -212,7 +212,7 @@ Ab hier kommen wir in den Bereich, wo auch Mutmaßungen eine gewisse Rolle spiel
 
 Zudem ist kein bösartiger Rowhammer-Angriff öffentlich bekannt, eine unmittelbare Gefahr und damit auch sofortiger Handlungsbedarf besteht also (scheinbar) nicht. Unsere Nachfolgenden Lösungsbeispiele haben wir an die Vorschläge im Bericht: 'Flipping Bits in Memory without accsessing them' von [[5]](5) angelehnt. 
 
-##### 6.1 ECC
+##### 6.1 ECC (Error-Correction-Code)
 
 Die denkbar idealste Lösung für das Rowhammer-Problem wäre, schlicht **bessere Chips** zu bauen. Ohne "schwache" Bits oder mit besserer Kontrolle haben Angreifer keinen Hebel. Theoretisch lässt sich RAM auf fehlerhafte Bits überprüfen, welche dann ersetz werden können. Dies macht die Herstellung allerdings wesentlich aufwendiger und daher impraktikabel. [[5]](5) [[11]](11)
 
