@@ -156,7 +156,7 @@ Wir starten unser bösartiges Programm und erstellen einen geteilten Speicherber
 
 Das Programm allokiert mit dem Systemaufruf mmap() [[9]](#9) immer wieder denselben Speicher. Es befindet sich also weiter **nur eine Page** im physikalischen Speicher.
 
-**ABER**: Jedes Mapping erhält einen eigenen Pagetable für den geteilten Speicherbereich. Der Speicher wir regelrecht mit Pagetables **zugepflastert**. Diese benötigen zugegeben nicht sonderlich viel Speicher (z.B. 4 kB)[[8]](#8). Werden wie in unserem Beispiel allerdings Millionen von Pagetables angelegt, füllt das den Speicher schnell.
+**ABER**: Jedes Mapping erhält einen eigenen Pagetable für den geteilten Speicherbereich. Der Speicher wir regelrecht mit Pagetables **zugepflastert**. Diese benötigen zugegeben nicht sonderlich viel Speicher (z.B. 4 kB)[[8]](#8). Werden wie in unserem Beispiel allerdings Millionen von Pagetables angelegt, füllt das den Speicher schnell. (Abb. 5)
 
 <u>Schritt 3</u>: 
 
@@ -164,13 +164,19 @@ Das Programm allokiert mit dem Systemaufruf mmap() [[9]](#9) immer wieder densel
 
 <u>Schritt 4</u>:
 
-Dieses eine Bit, kann nun das komplette System kompromittieren. Denn ändert das Bit an der richtigen Stelle seinen Wert, ändert dies die Kartierung des zugehörigen Prozesses. Oder einfacher: Der Pagetable zeigt plötzlich auf einen völlig anderen Bereich im physikalischen Speicher.
+Dieses eine Bit, kann nun das komplette System kompromittieren. Denn ändert das Bit an der richtigen Stelle seinen Wert, ändert dies die Kartierung des zugehörigen Prozesses. Oder einfacher: Der Pagetable zeigt plötzlich auf einen völlig anderen Bereich im physikalischen Speicher. (Abb. 5)
 
 Und noch besser: Weil der komplette Speicher ja immer noch voller Pagetables ist, zeigt unser neuer Pointer mit großer Wahrscheinlichkeit auf genau so einen Pagetable. Ziel ist jetzt, den Speicherbereich zu finden, der zum attackierten Pagetable gehört. Ist dieser gefunden, sind einem Angreifer eigentlich keine Grenzen gesetzt.[[8]](#8)
 
-<u>Schritt 5</u>: 
+<img title="" src="file:///C:/Users/leder/AppData/Roaming/marktext/images/2022-05-04-14-45-15-Abb7Markdown.PNG" alt="" data-align="center" width="678">
 
-Wir haben Schreib- und Lesezugriff auf einen Pagetable und das im User-Mode. Damit können wir den Pagetable ohne Probleme den kompletten physikalischen Speicher kartieren lassen. Das System gehört praktisch uns. 
+Abbildung 5 *Grobe Visualisierung des physikalischen Speichers*
+
+
+
+<u>Schritt 5</u>:
+
+Wir haben Schreib- und Lesezugriff auf einen Pagetable und das im User-Mode. Damit können wir den Pagetable ohne Probleme den kompletten physikalischen Speicher kartieren lassen. Das System gehört praktisch uns.
 
 Die Vorgehensweise ist hier natürlich sehr vereinfacht dargestellt. Die Suche nach schwachen Bits und das erkennen der richtigen Tables, sowie das korrekte Allokieren und teilweise Freigeben von Speicher brauchen entsprechende Vorbereitung und Fachwissen.
 
@@ -220,11 +226,11 @@ Noch ein Ansatz für bessern Schutz wäre das **Erhöhen** der sogenannten **Ref
 
 In Kürze: D-RAM-Bits verlieren ihre Ladung und müssen daher in sehr kurzen Zeitabständen ausgelesen- und wieder geladen werden. D-RAM-Bausteine werden typischerweise alle paar Dutzend Millisekunden aufgefrischt.[[14]](14) Der Rowhammer-Angriff **muss innerhalb einer Refresh-Periode abgeschlossen sein**, da die Bits ansonsten wieder ordnungsgemäß geladen sind.
 
-Im Prinzip reicht die Zeit in einem typischen Refresh-Zyklus für mehr als eine Million Speicherinstruktionen. Wird die Refresh-Rate allerdings erhöht, sinkt auch die Chance darauf, dass ein "schwaches" Bit rechtzeitig nachgibt (Abbildung 6).
+Im Prinzip reicht die Zeit in einem typischen Refresh-Zyklus für mehr als eine Million Speicherinstruktionen. Wird die Refresh-Rate allerdings erhöht, sinkt auch die Chance darauf, dass ein "schwaches" Bit rechtzeitig nachgibt (Abbildung 7).
 
 <img title="" src="Abb6Markdown.PNG" alt="" data-align="center" width="631">
 
-Abbildung 6 *Refresh-Interval vs. Error druch Rowhammer.* Aus RowHammer: a Retrospektive [[4]](#4)[[5]](#5) (Die Namen der Hersteller wurden anonymisiert)
+Abbildung 7 *Refresh-Interval vs. Error druch Rowhammer.* Aus RowHammer: a Retrospektive [[4]](#4)[[5]](#5) (Die Namen der Hersteller wurden anonymisiert)
 
 Problem hier: Eine höhere Refresh-Rate braucht extrem viel Leistung und schlägt deutlich auf die Performance des Systems (mehr Overhead). [[5]](5) Das Paper 'An experimental study of DRAM disturbance errors' schlägt hier einen gelegentlichen Teil-Refresh von benachbarten Reihen als Lösung vor. Der Refresh erfolgt per Zufall mit einer geringen Wahrscheinlichkeit. Durch die ständigen Rowhammer-Angriffe, wird der Refresh praktisch immer getriggert. Die Methode nennt sich **probabilistic adjacent row activation** oder kurz PARA. Dafür müsste der Memory-Controller erweitert werden.
 
