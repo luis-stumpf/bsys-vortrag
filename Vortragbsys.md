@@ -8,8 +8,6 @@ date: 04.05.2022
 lang: de
 ---
 
-
-
 # Rowhammer: Problem ohne Lösung
 
 ### Inhalt
@@ -60,7 +58,7 @@ lang: de
 
 ### 1. Abstract
 
-Es ist die ominöse Wolkenwand am Horizont: Rowhammer geistert als gewaltige Sicherheitslücke für Hauptspeicher schon länger durch einschlägige Medien und Fachzeitschriften. Zwischenzeitlich schien das Problem sogar überwunden, die Bedenken mehren sich zuletzt allerdings zunehmend. Im folgendden wollen wir zeigen, wie Rowhammer funktioniert und darauf aufbauend: warum es auch in naher Zukunft ein Problem bleiben wird.
+Es ist die ominöse Wolkenwand am Horizont: Rowhammer geistert als gewaltige Sicherheitslücke für Hauptspeicher schon länger durch einschlägige Medien und Fachzeitschriften. Zwischenzeitlich schien das Problem sogar überwunden, die Bedenken mehren sich zuletzt allerdings zunehmend. Im folgenden wollen wir zeigen, wie Rowhammer funktioniert und darauf aufbauend: warum es auch in naher Zukunft ein Problem bleiben wird.
 
 ### 2. Grundlagen
 
@@ -168,7 +166,7 @@ Das Programm allokiert mit dem Systemaufruf mmap() [[9]](#9) immer wieder densel
 
 Dieses eine Bit, kann nun das komplette System kompromittieren. Denn ändert das Bit an der richtigen Stelle seinen Wert, ändert dies die Kartierung des zugehörigen Prozesses. Oder einfacher: Der Pagetable zeigt plötzlich auf einen völlig anderen Bereich im physikalischen Speicher.
 
-Und noch besser: Weil der komplette Speicher ja immer noch voller Pagetables ist, zeigt unser neuer Pointer mit grosser Wahrscheinlichkeit auf genau so einen Pagetable.Ziel ist jetzt, den Speicherbereich zu finden, der zum attackierten Pagetable gehört. Ist dieser gefunden, sind einem Angreifer eigentlich keine Grenzen gesetzt.[[8]](#8)
+Und noch besser: Weil der komplette Speicher ja immer noch voller Pagetables ist, zeigt unser neuer Pointer mit großer Wahrscheinlichkeit auf genau so einen Pagetable. Ziel ist jetzt, den Speicherbereich zu finden, der zum attackierten Pagetable gehört. Ist dieser gefunden, sind einem Angreifer eigentlich keine Grenzen gesetzt.[[8]](#8)
 
 <u>Schritt 5</u>: 
 
