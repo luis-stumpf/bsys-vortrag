@@ -168,7 +168,7 @@ Dieses eine Bit, kann nun das komplette System kompromittieren. Denn ändert das
 
 Und noch besser: Weil der komplette Speicher ja immer noch voller Pagetables ist, zeigt unser neuer Pointer mit großer Wahrscheinlichkeit auf genau so einen Pagetable. Ziel ist jetzt, den Speicherbereich zu finden, der zum attackierten Pagetable gehört. Ist dieser gefunden, sind einem Angreifer eigentlich keine Grenzen gesetzt.[[8]](#8)
 
-<img title="" src="file:///C:/Users/leder/AppData/Roaming/marktext/images/2022-05-04-14-45-15-Abb7Markdown.PNG" alt="" data-align="center" width="678">
+<img title="" src="Abb7Markdown.PNG" alt="" data-align="center" width="678">
 
 Abbildung 5 *Grobe Visualisierung des physikalischen Speichers*
 
