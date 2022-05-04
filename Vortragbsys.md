@@ -226,7 +226,7 @@ In Kürze: D-RAM-Bits verlieren ihre Ladung und müssen daher in sehr kurzen Zei
 
 Im Prinzip reicht die Zeit in einem typischen Refresh-Zyklus für mehr als eine Million Speicherinstruktionen. Wird die Refresh-Rate allerdings erhöht, sinkt auch die Chance darauf, dass ein "schwaches" Bit rechtzeitig nachgibt (Abbildung 6).
 
-<img title="" src="file:///C:/Users/leder/Desktop/Abb6Markdown.PNG" alt="" data-align="center" width="631">
+<img title="" src="Abb6Markdown.PNG" alt="" data-align="center" width="631">
 
 Abbildung 6 *Refresh-Interval vs. Error druch Rowhammer.* Aus RowHammer: a Retrospektive [[4]](#4)[[5]](#5) (Die Namen der Hersteller wurden anonymisiert)
 
