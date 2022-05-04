@@ -12,8 +12,6 @@ Die Programmiersprache Javascript hat zunächste keine möglichkeit Pointer und 
 
 (Two side attacks)
 
-
-
 #### Wie schütz man Systemen gegen Rowhammerattacken
 
 Eine Möglichkeit diese Schwachstelle anzugehen wäre ***bessere Chips*** zubauen die ein grundlegend anderes Design aufweisen.
@@ -22,13 +20,13 @@ Eine Bereits in manchen RAM Bausteinen verwendete Methode ist ***ECC*** (Error C
 
 Noch ein ansatz wäre das ***erhöhen der Refresh Rate*** dies braucht jedoch extrem viel Leistung und schlägt extrem auf die Performence des Systems. (Rechnung maybe Grafik)
 
+Man könnte auch direkt in der ***Produktion des RAMs eingreifen und sie auf verwundbare zellen Prüfen*** lassen dies könnte jedoch mehrere Tage dauern und wäre ökonomisch einer Katastrophe. Falls man diese entdeckt könnte man die Kaputten zellen auf so Ersatzzellen verlegen.
 
+Zudem wäre es möglich dem ***Benutzer ein Programm mit auszuhändigen um das ganze selbst zumachen*** um sich vor einer Rowhammerattacke zuschützen.
 
+Da druch das erhöhen der Refresh Rate Rowhammer attacken verhindert werden könnte man immer die ***benachbarten Zeilen von häufig genutzten Zeilen refreshen*** um in ihnen die warscheinlichkeit eines Bitflips zuverhindern.
 
-
-
-
-
+PARA
 
 id="15">15 Referenz 15 [Throwhammer: Rowhammer Attacks over the Network and Defenses](https://download.vusec.net/papers/throwhammer_atc18.pdf)
 
