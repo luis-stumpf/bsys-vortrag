@@ -4,8 +4,8 @@ subtitle: "Gruppe 7"
 author: 
 - Luis Stumpf
 - Lewin Eder
-  date: 04.05.2022
-  lang: de
+date: 04.05.2022
+lang: de
 ---
 
 \maketitle
