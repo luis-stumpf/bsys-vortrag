@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="de" xml:lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Luis Stumpf" />
+  <meta name="author" content="Lewin Eder" />
+  <title>Rowhammer: Problem ohne Lösung</title>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      word-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Rowhammer: Problem ohne Lösung</h1>
+<p class="subtitle">Gruppe 7</p>
+<p class="author">Luis Stumpf</p>
+<p class="author">Lewin Eder</p>
+<p class="date">04.05.2022</p>
+</header>
+<h1 id="rowhammer-problem-ohne-lösung">Rowhammer: Problem ohne Lösung</h1>
+<h3 id="inhalt">Inhalt</h3>
+<ol type="1">
+<li><p>Abstract</p></li>
+<li><p>Grundlagen</p>
+<ol type="1">
+<li><p>Einleitung: Der Speicher als Fehler</p></li>
+<li><p>Dynamic Random Access Memory -DRAM</p></li>
+<li><p>Das Problem mit der Grösse</p></li>
+</ol></li>
+<li><p>Rowhammer</p>
+<ol type="1">
+<li><p>Die Idee</p></li>
+<li><p>Code</p></li>
+<li><p>Systemschwächen ausnutzen</p></li>
+</ol></li>
+<li><p>Von der Theorie zur Praxis: Angriff auf den Linux-Kernel</p>
+<ol type="1">
+<li><p>Linux Speicherschutz durch Virtualisierung</p></li>
+<li><p>Der Page-Table als Achillesverse</p></li>
+</ol></li>
+<li><p>Rowhammer in der Realität</p>
+<ol type="1">
+<li><p>Throwhammer: Eine Rowhammer-Attacke über Netzwerke</p></li>
+<li><p>Jackhammer: Eine Rowhammer-Attacke über Websites</p></li>
+</ol></li>
+<li><p>Schutz gegen Rowhammer</p>
+<ol type="1">
+<li><p>ECC</p></li>
+<li><p>Refresh-Rate</p></li>
+</ol></li>
+<li><p>Fazit</p></li>
+<li><p>Anhang</p></li>
+<li><p>Referenzen</p></li>
+</ol>
+<p> </p>
+<h3 id="abstract">1. Abstract</h3>
+<p>Es ist die ominöse Wolkenwand am Horizont: Rowhammer geistert als gewaltige Sicherheitslücke für Hauptspeicher schon länger durch einschlägige Medien und Fachzeitschriften. Zwischenzeitlich schien das Problem sogar überwunden, die Bedenken mehren sich zuletzt allerdings zunehmend. Im folgenden wollen wir zeigen, wie Rowhammer funktioniert und darauf aufbauend: warum es auch in naher Zukunft ein Problem bleiben wird.</p>
+<h3 id="grundlagen">2. Grundlagen</h3>
+<h5 id="einleitung-der-speicher-als-fehler">2.1 Einleitung: Der Speicher als Fehler</h5>
+<p>Die Schwäche heutiger Speichersysteme gegenüber potenziellen Rowhammer-Angriffen liegt in der Natur des DRAM-Speichers selbst. Die Speicherzellen <strong>sind</strong> quasi der Fehler im System. Wir starten unsere Reise in die Tiefen der Hacker-Theorie also im Kleinen, genauer: im DRAM-Bit.</p>
+<h5 id="dynamic-random-access-memory---dram">2.2 Dynamic Random Access Memory - DRAM</h5>
+<p>DRAM hat viele Vorteile. Er ist schnell, kostengünstig und bleibt dabei konzeptionell “simpel”, zumindest im Vergleich mit anderem RAM-Speicher. Uns reicht hier eine grobe Idee der Architektur. Die Beschreibung im Text bleibt also bei den Grundlagen.[1]</p>
+<p>Um die Probleme der Speicherbausteine gegen Rowhammer-Angriffe zu verstehen, betrachten wir nachfolgend den theoretischen Aufbau einzelner Zellen. DRAM-Bits bestehen in ihrer einfachsten Form nur aus einem Transistor und einem Kondensator (Capacitor), der Information speichert (Siehe Abbildung 1).</p>
+<figure>
+<img src="res/Abb1Markdown.PNG" title="DRAM Circuit Design" style="width:50.0%" alt="Bild aus DRAM Circuit Design [1] S. 10 Fig, 1.12" /><figcaption aria-hidden="true">Bild aus DRAM Circuit Design [1] S. 10 Fig, 1.12</figcaption>
+</figure>
+<p>DRAM ist als eine Matrix solcher Bits aufgebaut (Abb2). Jedes Bit in dieser Speichermatrix wird über eine sogenannte Wort-Leitung und eine Bit-Leitung adressiert - auch Row und Column genannt.</p>
+<p>Wenn in ein Bit geschrieben werden soll, muss die Wort-Leitung nur Spannung auf den Gate-Anschluss (Abb1 G) des Transistors geben. Damit wird eine leitende Verbindung von Drain- (Abb1 D) zu Source-Gebieten (Abb1 S) hergestellt und der Kondensator kann über die Bit-Leitung geladen werden. Ganz ähnlich wird auch aus den Kondensatoren gelesen.</p>
+<p>Bereits die kleinsten Bausteine enthalten über 1000 Speicherzellen in einer Matrix. In Abbildung zwei wird ein Zugriff in einer solchen Matrix vereinfacht dargestellt.</p>
+<figure>
+<img src="res/Abb2Markdown.PNG" title="Matrix-Darstellungder Bits" style="width:80.0%" alt="Abbildung 2 vereinfachte Matrix-Darstellung der Bits" /><figcaption aria-hidden="true">Abbildung 2 vereinfachte Matrix-Darstellung der Bits</figcaption>
+</figure>
+<h5 id="das-problem-mit-der-grösse">2.3 Das Problem mit der Grösse</h5>
+<p>DRAM kann extrem kompakt hergestellt werden. Eine Grafik aus dem 2012 veröffentlichten Buch “CHIPS 2020” zeigt, das der durchschnittliche DRAM-Baustein schon vor Jahren aus Billionen von Bits je Quadratzentimeter bestand.[3] Eine so komprimierte Architektur erlaubt Speicherzugriffe im Nanosekundenbereich.</p>
+<figure>
+<img src="res/Abb3Markdown.PNG" title="Evolution of CMOS memory density for SRAM, DRAM and Flash memory" style="width:50.0%" alt="Evolution of CMOS memory density for SRAM, DRAM and Flash memory. Aus CHIPS 2020 [2],[3]" /><figcaption aria-hidden="true"><em>Evolution of CMOS memory density for SRAM, DRAM and Flash memory.</em> Aus CHIPS 2020 [2],[3]</figcaption>
+</figure>
+<p>Allerdings bringen Chips mit dieser Kompaktheit und geradezu irren Geschwindigkeit ihre eigenen Herausforderungen mit sich. Kurz: Es gibt auch fehlerhafte Bits, die praktisch nicht zu beseitigen sind.</p>
+<p>Diese machen den Chip i. d. R. nicht unbrauchbar, können aber kleine Lecks verursachen, die andere Bits in direkter Nachbarschaft beeinflussen. Im Prinzip können Bits so Ladung austauschen, obwohl sie eigentlich isoliert sein sollten. Und da kommen wir endlich zur Krux: Denn genau diese “schwachen” Bits versucht Rowhammer auszunutzen.[4]</p>
+<h3 id="rowhammer">3. Rowhammer</h3>
+<h5 id="die-idee">3.1 Die Idee</h5>
+<p>Das Prinzip von Rowhammer ist äußerst einfach. Schwache Bits im Speicher sollen gezielt ausgenutzt werden. Über <strong>schnelle Speicherzugriffe des immer selben Speicherbereichs</strong>, wird im Nanosekundenbereich wieder und wieder die gleiche Wort-Leitung (Row) unter Spannung gesetzt. Der Angreifer “hämmert” sozusagen auf eine Reihe ein. Daher der Name <em>Row-Hammer</em>.</p>
+<p>Durch dieses Hämmern erhöht sich die Chance, das ein “schwaches” Bit nachgibt und ein Leck verursacht deutlich.[4] Im schlimmsten Fall löst das entsprechende Bit dann einen Statuswechsel in einer anderen Reihe aus. Etwas konkreter formuliert: Das Leck kann in einem nahe liegenden Bit eine 0 zu einer 1 machen.</p>
+<h5 id="code">3.2 Code</h5>
+<p>Der für das reine “hämmern” nötige Code beschränkt sich für gängige Prozessoren auf ein paar Zeilen x86-Assembler.</p>
+<figure>
+<img src="res/Abb4Markdown.PNG" title="Beispiel aus Flipping Bits in Memory Without Accessing Them" style="width:30.0%" alt="Beispiel aus Flipping Bits in Memory Without Accessing Them: An Experimental Study of DRAM Disturbance Errors[5]" /><figcaption aria-hidden="true">Beispiel aus <em>Flipping Bits in Memory Without Accessing Them: An Experimental Study of DRAM Disturbance Errors</em>[5]</figcaption>
+</figure>
+<p>In Zeile 1 und 2 werden Registerinhalte in Reihe X und Y gespeichert. Gleich darauf spült oder flushed (invalidiert) das Programm in Zeile 4 und 5 die Reihen wieder[6] und stellt mit mfence in Zeile 6 sicher, dass die Speicherzugriffe in der richtigen Reihenfolge ablaufen. In Zeile 7 wird der Code dann erneut aufgerufen, die Speicherzugriffe wiederholen sich.</p>
+<p>Das Speichern und Flushen in zwei unterschiedlichen Reihen ist ein kleiner, aber nötiger Umweg, da gängiger RAM eine Reihe zwischenspeichert, um diese nicht wiederholt aufrufen zum müssen.[5] Ohne den abwechselnden Zugriff auf eine andere Reihe würde das System also nur vordergründig Anfragen an die immer gleiche Zeile richten.</p>
+<p>Trotzdem bleibt der Code überraschend einfach. Und fast noch schlimmer: um diesen Code auszuführen, sind keine Root-Rechte notwendig.</p>
+<p>Damit lassen sich Schwachstellen noch nicht gezielt ausnutzen, ein Testprogramm von Google [0] kommt aber bereits mit einigen Hundert Zeilen Code aus. Aktuelle Systeme lassen sich nicht ganz so einfach überlisten. Wichtig ist uns hier einfach zu zeigen, dass Rowhammer auf einem sehr grundlegenden Level agiert. Es nutzt einen Fehler aus, der sich nicht einfach “wegpatchen” lässt.</p>
+<figure>
+<img src="res/Abb5Markdown.PNG" title="Rowhammer error rate vs manufacturing dates" style="width:50.0%" alt="RowHammer error rate vs. manufacturing dates of 129 DRAM modules we tested. Aus RowHammer: a Retrospektive [4],5" /><figcaption aria-hidden="true"><em>RowHammer error rate vs. manufacturing dates of 129<br />
+DRAM modules we tested.</em> Aus RowHammer: a Retrospektive [4],<a href="Die%20Namen%20der%20Hersteller%20wurden%20anonymisiert">5</a></figcaption>
+</figure>
+<p>Abbildung 5 zeigt elementar, dass die Anzahl der anfälligen Bits in Speicherblöcken bis etwa 2012 aufgrund der zunehmenden Dichte immer weiter zugenommen hat. Je näher die Bits also zusammenliegen, umso anfälliger sind sie für Rowhammering. Den Abwärtstrend in späteren Jahren thematisieren wir in einem der nachfolgenden Kapitel.</p>
+<h5 id="systemschwächen-ausnutzen">3.3 Systemschwächen ausnutzen</h5>
+<p>Ab hier beginnt der kompliziertere Teil des Angriffes. Bis jetzt kann unser Prozess nur einzelne Bits zum Kippen bringen, dies geschieht allerdings eher zufällig und bringt im allerschlimmsten Fall vielleicht ein Programm zum Absturz. Um einen wirklich nutzbaren Rowhammer-Angriff anzusetzen, muss sich der Angreifer zum Beispiel in der Paging-Trickkiste bedienen. Wir nehmen hier zu Demonstrationszwecken ein Linux-System, dass so auch von Google-Forschern gehackt wurde.</p>
+<h3 id="von-der-theorie-zur-praxis-angriff-auf-den-linux-kernel">4. Von der Theorie zur Praxis: Angriff auf den Linux-Kernel</h3>
+<h5 id="linux-speicherschutz-durch-virtualisierung">4.1 Linux Speicherschutz durch Virtualisierung</h5>
+<p>Der Linux-Kernel hat prinzipiell eine sichere Methode, um Speicher zu verwalten. Das System <strong>virtualisiert</strong> den physikalischen Speicher für Nutzer quasi unsichtbar über Soft- und Hardware. [7] Auch andere Betriebssysteme wie Windows und MAC-OS machen sich diesen Trick zunutze.</p>
+<p>Das Betriebssystem teilt den physikalischen Speicher in Seiten (Korrekt eigentlich Seitenrahmen oder rauch Seitenkacheln) und kartiert diese in einem separaten Speicherbereich dem Pagetable. Die Karte für eine solche Seite, im folgenden Pageframe genannt, ist nur für das Betriebssystem sichtbar. Nutzer-Prozessen wird vom Betriebssystem schlicht nicht erlaubt, auf Pageframes zuzugreifen.</p>
+<p>So schützt das Betriebssystem sich selbst und Prozesse voreinander. Sie können nur auf für sie speziell kartierte Bereiche zugreifen. Nachfolgend zeigt sich aber: genau diese Pageframes, also die im Speicher abgelegten Karten können Linux zum Verhängnis werden.</p>
+<h5 id="der-pagetable-als-achillesverse-schritt-für-schritt-anleitung">4.2 Der Pagetable als Achillesverse (Schritt für Schritt-Anleitung)</h5>
+<p>Der Schutz von Speicher gegen bösartige Prozesse basiert im Grunde genommen darauf, dass Prozesse ihren eigenen Pagetable nicht verändern können, weil dieser außerhalb des für sie kartierten Bereiches liegt. Hier schlagen wir Schritt für Schritt eine Bresche in das schöne Sicherheitskonstrukt und beschreiben eine Attacke aus Sicht des Angreifers. Um das Beispiel zu vereinfachen, nehmen wir an, dass der physikalische Speicher von Betriebsystem-Daten abgesehen leer ist.</p>
+<p><u>Schritt 1</u>:</p>
+<p>Wir starten unser bösartiges Programm und erstellen einen geteilten Speicherbereich (Shared-Page), auf welchen wiederholt zugegriffen werden kann.[8]</p>
+<p><u>Schritt 2</u>:</p>
+<p>Das Programm allokiert mit dem Systemaufruf mmap() [9] immer wieder denselben Speicher. Es befindet sich also weiter <strong>nur eine Page</strong> im physikalischen Speicher.</p>
+<p><strong>ABER</strong>: Jedes Mapping erhält einen eigenen Pagetable für den geteilten Speicherbereich. Der Speicher wir regelrecht mit Pagetables <strong>zugepflastert</strong>. Diese benötigen zugegeben nicht sonderlich viel Speicher (z.B. 4 kB)[8]. Werden wie in unserem Beispiel allerdings Millionen von Pagetables angelegt, füllt das den Speicher schnell. (Abb. 5)</p>
+<p><u>Schritt 3</u>:</p>
+<p><strong>HAMMER-TIME</strong>. Jetzt, wo der Speicher praktisch nur noch aus einer Page und Millionen von Pagetables besteht, kommt der große Moment des kleinen Code-Abschnitts in Abbildung 4. Das Programm hämmert im Nanosekundenbereich auf eine Reihe im allokierten Speicher ein. Mit etwas Glück leckt ein Bit. Im benachbarten Pagetable wechselt eine 0 zu einer 1.</p>
+<p><u>Schritt 4</u>:</p>
+<p>Dieses eine Bit, kann nun das komplette System kompromittieren. Denn ändert das Bit an der richtigen Stelle seinen Wert, ändert dies die Kartierung des zugehörigen Prozesses. Oder einfacher: Der Pagetable zeigt plötzlich auf einen völlig anderen Bereich im physikalischen Speicher. (Abb. 5)</p>
+<p>Und noch besser: Weil der komplette Speicher ja immer noch voller Pagetables ist, zeigt unser neuer Pointer mit großer Wahrscheinlichkeit auf genau so einen Pagetable. Ziel ist jetzt, den Speicherbereich zu finden, der zum attackierten Pagetable gehört. Ist dieser gefunden, sind einem Angreifer eigentlich keine Grenzen gesetzt.[8]</p>
+<figure>
+<img src="res/Abb7Markdown.PNG" title="Grobe Visualisierung dws physikalischen Speichers" style="width:50.0%" alt="Grobe Visualisierung des physikalischen Speichers" /><figcaption aria-hidden="true"><em>Grobe Visualisierung des physikalischen Speichers</em></figcaption>
+</figure>
+<p><u>Schritt 5</u>:</p>
+<p>Wir haben Schreib- und Lesezugriff auf einen Pagetable und das im User-Mode. Damit können wir den Pagetable ohne Probleme den kompletten physikalischen Speicher kartieren lassen. Das System gehört praktisch uns.</p>
+<p>Die Vorgehensweise ist hier natürlich sehr vereinfacht dargestellt. Die Suche nach schwachen Bits und das erkennen der richtigen Tables, sowie das korrekte Allokieren und teilweise Freigeben von Speicher brauchen entsprechende Vorbereitung und Fachwissen.</p>
+<h3 id="rowahmmer-in-der-realität">5. Rowahmmer in der Realität</h3>
+<p>Der beschriebene Angriff auf das Linux-System ist für Hacker natürlich nur bedingt nutzbar. Der Angreifer muss lokal ein Programm einschleusen. Allerdings können Angriffe nachgewiesenermaßen sehr vielseitig erfolgen. Wir führen als Beispiel zwei mögliche “Eintritts-Punkte” auf.</p>
+<h5 id="throwhammer-eine-rowhammer-attacke-über-netzwerke">5.1 Throwhammer: Eine Rowhammer-Attacke über Netzwerke</h5>
+<p>Ganz allgemein lässt sich Rowhammer nur dann ausnutzen, wenn ein Angreifer mehr oder weniger direkt Prozesse starten und Speicher anfordern kann. Im Gegensatz zu lese- und Schreibzugriffen im Hauptspeicher sind Netzwerk-Anfragen geradezu lachhaft langsam.</p>
+<p>Das heißt allerdings keineswegs, dass Rowhammer-Attacken von einem “Außenstehenden” nicht möglich sind. Rowhammer kann “remote” z.B. gegen Cloud-Services eingesetzt werden und ganz treffend wird diese Methode dann auch <strong>Throw</strong>-Hammer genannt.[15]</p>
+<p>Um eine Throwhammer Attacke zu ermöglichen, braucht das Zielsystem eine Netzwerkanbindung mit einer Geschwindigkeit von mindest 10 Gigabit pro Sekunde. Das ist heutzutage keine Seltenheit mehr.[15] Gerade bei älteren Speicher-Systemen braucht der Angreifer nur einen normalen User-Zugang ohne besondere Rechte.</p>
+<p>Auf der Serverseite allokiert der “Hacker” dann einfach einen zusammenhängenden Speicher-Bereich und füllt diesen wiederholt mit Nullen oder Einsen. Währenddessen wird überprüft, ob ein Bit im allokierten Speicher “flippt”. Gibt ein Bit nach, lässt sich so auch in Speicherbereiche schreiben, auf die ein Nutzer keinen Zugriff haben sollte. Allerdings ist hier eine gewisse Kenntnis über das System nötig, da der Nutzer Speicher “intelligent” allokieren und freigeben muss.[15]</p>
+<p>Fazit: Sensible Daten nur auf dem eigenen Server, oder auf Servern die nicht “jeden” Kunden akzeptieren.</p>
+<h5 id="jackhammer-eine-rowhammer-attacke-über-websites-rowhammer.js">5.2 Jackhammer: Eine Rowhammer-Attacke über Websites (Rowhammer.js)</h5>
+<p>Auch Attacken auf Heimcomputer sind nicht unmöglich. Hier dient, dass bei Programmierern äußerst beliebte Java-Script einmal mehr als Ansetzpunkt für unser virtuelles Brecheisen.</p>
+<p>Die Programmiersprache Javascript hat zwar zunächst keine Möglichkeit, Pointer und virtuelle Adressen anzusprechen. Kann sich aber sehr große Arrays generieren lassen. Diese werden auf allen aktuellen Google-Chrome- und Firefox-Browser in einem Linux System als 2-MB-Pages allokiert. Verantwortung trägt hier das Betriebssystem. Die Methode wird bei jeder Scriptsprache so angewendet.[16] Ein bösartiges Skript kann so wiederholt in hoher Frequenz über die Arrays iterieren und damit auch von einer Website aus auf Reihen einhämmern, ergo ein Bit zum Kippen bringen. Ab hier geht ein Angreifer wieder nach dem bereits bekannten Konzept vor.</p>
+<p>Der springende Punkt: Ein Angriff startet auf dem Heimcomputer direkt beim Aufrufen einer bösartigen Webseite und ist als solcher auch nicht einfach zu erkennen.</p>
+<p>Immerhin können sich auch Heimcomputer-Nutzer denkbar einfach schützen. In allen gängigen Browsern lässt sich Java-Script für unbekannte Webseiten deaktivieren, was wir auch ganz allgemein empfehlen würden.[16]</p>
+<h3 id="schutz-gegen-rowhammerattacken">6. Schutz gegen Rowhammerattacken</h3>
+<p>Ab hier kommen wir in den Bereich, wo auch Mutmaßungen eine gewisse Rolle spielen. Viele Autoren, die sich jüngst mit Rowhammer befasst haben, bezweifeln, dass sich Systeme aktuell mit vollkommener Sicherheit schützen lassen.[10] Das liegt auch daran, dass ein bekanntes Schutz-Konzept Systeme langsamer macht und deshalb nicht immer praktikabel wäre.</p>
+<p>Zudem ist kein bösartiger Rowhammer-Angriff öffentlich bekannt, eine unmittelbare Gefahr und damit auch sofortiger Handlungsbedarf besteht also (scheinbar) nicht. Unsere Nachfolgenden Lösungsbeispiele haben wir an die Vorschläge im Bericht: ‘Flipping Bits in Memory without accsessing them’ von [5] angelehnt.</p>
+<h5 id="ecc-error-correction-code">6.1 ECC (Error-Correction-Code)</h5>
+<p>Die denkbar idealste Lösung für das Rowhammer-Problem wäre, schlicht <strong>bessere Chips</strong> zu bauen. Ohne “schwache” Bits oder mit besserer Kontrolle haben Angreifer keinen Hebel. Theoretisch lässt sich RAM auf fehlerhafte Bits überprüfen, welche dann ersetz werden können. Dies macht die Herstellung allerdings wesentlich aufwendiger und daher impraktikabel. [5],[11]</p>
+<p>Ein gutes Beispiel für eine Lösung ist die bereits in manchen RAM Bausteinen verwendete <strong>ECC-Methode</strong>. Das Error-Corretion-Code-Verfahren verwendet einen Hashwert zur Identifikation von Ein- , Zwei- und teilweise auch Mehr-Bit-Fehlern. Für dieses Verfahren werden 72 statt den üblichen 64 Bits für jede Speicherzelle benötigt.[12] Da aber auch ECC nicht sämtliche Fehler ausmerzt, bietet es keinen optimalen Schutz. Auch-ECC-Systeme wurden bereits nachweislich mit Rowhammering “geknackt”.[10]</p>
+<p>Immerhin: Ein bisschen mehr Schutz ist besser als gar keiner. Einfache Rowhammer-Angriffe scheitern schon an DDR4-RAM, ein Upgrade schadet also nie.</p>
+<h5 id="refresh-rate">6.2 Refresh-Rate</h5>
+<p>Noch ein Ansatz für bessern Schutz wäre das <strong>Erhöhen</strong> der sogenannten <strong>Refresh-Rate</strong> innerhalb der Hardware.</p>
+<p>In Kürze: D-RAM-Bits verlieren ihre Ladung und müssen daher in sehr kurzen Zeitabständen ausgelesen- und wieder geladen werden. D-RAM-Bausteine werden typischerweise alle paar Dutzend Millisekunden aufgefrischt.[14] Der Rowhammer-Angriff <strong>muss innerhalb einer Refresh-Periode abgeschlossen sein</strong>, da die Bits ansonsten wieder ordnungsgemäß geladen sind.</p>
+<p>Im Prinzip reicht die Zeit in einem typischen Refresh-Zyklus für mehr als eine Million Speicherinstruktionen. Wird die Refresh-Rate allerdings erhöht, sinkt auch die Chance darauf, dass ein “schwaches” Bit rechtzeitig nachgibt (Abbildung 7).</p>
+<figure>
+<img src="res/Abb6Markdown.PNG" title="Refresh-Interval vs. Error dur Rowhammer" style="width:50.0%" alt="Refresh-Interval vs. Error druch Rowhammer. Aus RowHammer: a Retrospektive [4],[5] (Die Namen der Hersteller wurden anonymisiert)" /><figcaption aria-hidden="true"><em>Refresh-Interval vs. Error druch Rowhammer.</em> Aus RowHammer: a Retrospektive [4],[5] (Die Namen der Hersteller wurden anonymisiert)</figcaption>
+</figure>
+<p>Problem hier: Eine höhere Refresh-Rate braucht extrem viel Leistung und schlägt deutlich auf die Performance des Systems (mehr Overhead). <a href="5">[5]</a> Das Paper ‘An experimental study of DRAM disturbance errors’ schlägt hier einen gelegentlichen Teil-Refresh von benachbarten Reihen als Lösung vor. Der Refresh erfolgt per Zufall mit einer geringen Wahrscheinlichkeit. Durch die ständigen Rowhammer-Angriffe, wird der Refresh praktisch immer getriggert. Die Methode nennt sich <strong>probabilistic adjacent row activation</strong> oder kurz PARA. Dafür müsste der Memory-Controller erweitert werden.[13]</p>
+<h3 id="fazit-gelegenheit-schafft-diebe">7. Fazit: Gelegenheit schafft Diebe</h3>
+<p>Stand heute ist noch kein gelungener “bösartiger” Hack mittels Rowhammer bekannt. Alle nachweislich funktionstüchtigen Angriffsmethoden wurden von System-Entwicklern und Sicherheitsspezialisten genutzt, um die Schwachpunkte im Hauptspeicher erst nachzuweisen. Da entsprechende Attacken auf älteren Systemen allerdings vollkommen unbemerkt ablaufen können, lässt sich ein Hack auch nicht vollkommen ausschließen. Die Bedenken unter System-Sicherheitsexperten sind zudem real.[10] Gesetz dem Sprichwort im Titel kommen wir zu dem Schluss, dass Chip- und System-Entwickler nicht erst auf den “Dieb” warten sollten.</p>
+<h3 id="für-interessierte-rowhammerhome">8. Für Interessierte: (Rowhammer@Home)</h3>
+<p>Google hat einen Row-Hammer-Test für x86-Computer als Open-Source-Projekt veröffentlicht. Der Test findet nur mit älteren Ram-Riegeln (DDR3) falsche Bits.[0]</p>
+<figure>
+<img src="res/Abb0Markdown.PNG" title="Github repo" style="width:50.0%" alt="Rowhammer Open-Source-Projekt" /><figcaption aria-hidden="true">Rowhammer Open-Source-Projekt</figcaption>
+</figure>
+<h3 id="referenzen">9. Referenzen</h3>
+<p>[0] Referenz 0 <a href="https://github.com/google/rowhammer-test">GitHub - google/rowhammer-test: Test DRAM for bit flips caused by the rowhammer problem</a></p>
+<p>[1] Referenz 1<a href="https://books.google.de/books?id=TgW3LTubREQC&amp;pg=PA33&amp;hl=de&amp;source=gbs_toc_r&amp;cad=3#v=onepage&amp;q&amp;f=false">DRAM Circuit Design: Fundamental and High-Speed Topics - Brent Keeth, R. Jacob Baker, Brian Johnson, Feng Lin - Google Books</a></p>
+<p>[2] Referenz 2<a href="https://www.chips2020.net/chapter/towards-terabit-memories">Towards Terabit Memories | Chips 2020</a></p>
+<p>[3] Referenz 3 [<a href="https://link.springer.com/book/10.1007/978-3-642-23096-7">Chips 2020 | SpringerLink</a>]</p>
+<p>[4] Referenz 4 [<a href="https://arxiv.org/abs/1904.09724">[1904.09724] RowHammer: A Retrospective</a>]</p>
+<p>[5] Referenz 5 [<a href="https://ieeexplore.ieee.org/document/6853210">Flipping bits in memory without accessing them: An experimental study of DRAM disturbance errors | IEEE Conference Publication | IEEE Xplore</a>]</p>
+<p>[6] Referenz 6 <a href="https://c9x.me/x86/html/file_module_x86_id_30.html">Into the Void: x86 Instruction Set Reference</a></p>
+<p>[7] Referenz 7 <a href="https://pages.cs.wisc.edu/~remzi/OSTEP/vm-paging.pdf">Operating Systems: Three Easy Pieces</a></p>
+<p>[8] Referenz 8 <a href="https://googleprojectzero.blogspot.com/2015/03/exploiting-dram-rowhammer-bug-to-gain.html">Project Zero: Exploiting the DRAM rowhammer bug to gain kernel privileges</a></p>
+<p>[9] Referenz 9 <a href="https://man7.org/linux/man-pages/man2/mmap.2.html">mmap(2) - Linux manual page</a></p>
+<p>[10] Referenz 10 <a href="https://ieeexplore.ieee.org/document/8835222">Exploiting Correcting Codes: On the Effectiveness of ECC Memory Against Rowhammer Attacks | IEEE Conference Publication | IEEE Xplore</a></p>
+<p>[11] Referenz 11 <a href="https://link.springer.com/book/10.1007/978-1-4419-7958-2">Nanoscale Memory Repair | SpringerLink</a></p>
+<p>[12] Referenz 12 <a href="https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&amp;arnumber=8809496">Understanding and Modeling On-Die Error Correction in Modern DRAM: An Experimental Study Using Real Devices | IEEE Conference Publication | IEEE Xplore</a></p>
+<p>[13] Referenz 13 [The RowHammer Problem and Other Issues We May Face as Memory Becomes Denser] (https://people.inf.ethz.ch/omutlu/pub/rowhammer-and-other-memory-issues_date17.pdf)</p>
+<p>[14] Referenz 14 <a href="https://ghose.web.illinois.edu/papers/17sigmetrics_voltron.pdf">Understanding Reduced-Voltage Operation<br />
+in Modern DRAM Devices</a></p>
+<p>[15] Referenz 15 <a href="https://download.vusec.net/papers/throwhammer_atc18.pdf">Throwhammer: Rowhammer Attacks over the Network and Defenses</a></p>
+<p>[16] Referenz 16 <a href="https://arxiv.org/pdf/1507.06955.pdf">Rowhammer.js: A Remote Software-Induced Fault Attack in JavaScript</a></p>
+</body>
+</html>
