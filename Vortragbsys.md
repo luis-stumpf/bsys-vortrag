@@ -224,7 +224,7 @@ Im Prinzip reicht die Zeit in einem typischen Refresh-Zyklus für mehr als eine 
 
 ![*Refresh-Interval vs. Error druch Rowhammer.* Aus RowHammer: a Retrospektive [4],[5] (Die Namen der Hersteller wurden anonymisiert)](res/Abb6Markdown.PNG "Refresh-Interval vs. Error dur Rowhammer"){width=50%}
 
-Problem hier: Eine höhere Refresh-Rate braucht extrem viel Leistung und schlägt deutlich auf die Performance des Systems (mehr Overhead). [[5]](5) Das Paper 'An experimental study of DRAM disturbance errors' schlägt hier einen gelegentlichen Teil-Refresh von benachbarten Reihen als Lösung vor. Der Refresh erfolgt per Zufall mit einer geringen Wahrscheinlichkeit. Durch die ständigen Rowhammer-Angriffe, wird der Refresh praktisch immer getriggert. Die Methode nennt sich **probabilistic adjacent row activation** oder kurz PARA. Dafür müsste der Memory-Controller erweitert werden.[13](13)
+Problem hier: Eine höhere Refresh-Rate braucht extrem viel Leistung und schlägt deutlich auf die Performance des Systems (mehr Overhead). [[5]](5) Das Paper 'An experimental study of DRAM disturbance errors' schlägt hier einen gelegentlichen Teil-Refresh von benachbarten Reihen als Lösung vor. Der Refresh erfolgt per Zufall mit einer geringen Wahrscheinlichkeit. Durch die ständigen Rowhammer-Angriffe, wird der Refresh praktisch immer getriggert. Die Methode nennt sich **probabilistic adjacent row activation** oder kurz PARA. Dafür müsste der Memory-Controller erweitert werden.[13]
 
 ### 7. Fazit: Gelegenheit schafft Diebe
 
@@ -232,7 +232,7 @@ Stand heute ist noch kein gelungener "bösartiger" Hack mittels Rowhammer bekann
 
 ### 8. Für Interessierte: (Rowhammer@Home)
 
-Google hat einen Row-Hammer-Test für x86-Computer als Open-Source-Projekt veröffentlicht. Der Test findet nur mit älteren Ram-Riegeln (DDR3) falsche Bits.[[0]](#0)
+Google hat einen Row-Hammer-Test für x86-Computer als Open-Source-Projekt veröffentlicht. Der Test findet nur mit älteren Ram-Riegeln (DDR3) falsche Bits.[0]
 
 ![Rowhammer Open-Source-Projekt](res/Abb0Markdown.PNG "Github repo"){width=50%}
 
