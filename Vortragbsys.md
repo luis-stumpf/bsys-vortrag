@@ -224,7 +224,7 @@ Im Prinzip reicht die Zeit in einem typischen Refresh-Zyklus für mehr als eine 
 
 ![*Refresh-Interval vs. Error druch Rowhammer.* Aus RowHammer: a Retrospektive [4],[5] (Die Namen der Hersteller wurden anonymisiert)](res/Abb6Markdown.PNG "Refresh-Interval vs. Error dur Rowhammer"){width=50%}
 
-Problem hier: Eine höhere Refresh-Rate braucht extrem viel Leistung und schlägt deutlich auf die Performance des Systems (mehr Overhead). [[5]](5) Das Paper 'An experimental study of DRAM disturbance errors' schlägt hier einen gelegentlichen Teil-Refresh von benachbarten Reihen als Lösung vor. Der Refresh erfolgt per Zufall mit einer geringen Wahrscheinlichkeit. Durch die ständigen Rowhammer-Angriffe, wird der Refresh praktisch immer getriggert. Die Methode nennt sich **probabilistic adjacent row activation** oder kurz PARA. Dafür müsste der Memory-Controller erweitert werden.
+Problem hier: Eine höhere Refresh-Rate braucht extrem viel Leistung und schlägt deutlich auf die Performance des Systems (mehr Overhead). [[5]](5) Das Paper 'An experimental study of DRAM disturbance errors' schlägt hier einen gelegentlichen Teil-Refresh von benachbarten Reihen als Lösung vor. Der Refresh erfolgt per Zufall mit einer geringen Wahrscheinlichkeit. Durch die ständigen Rowhammer-Angriffe, wird der Refresh praktisch immer getriggert. Die Methode nennt sich **probabilistic adjacent row activation** oder kurz PARA. Dafür müsste der Memory-Controller erweitert werden.[13](13)
 
 ### 7. Fazit: Gelegenheit schafft Diebe
 
@@ -265,6 +265,8 @@ Google hat einen Row-Hammer-Test für x86-Computer als Open-Source-Projekt verö
 [11] Referenz 11 [Nanoscale Memory Repair | SpringerLink](https://link.springer.com/book/10.1007/978-1-4419-7958-2)
 
 [12] Referenz 12 [Understanding and Modeling On-Die Error Correction in Modern DRAM: An Experimental Study Using Real Devices | IEEE Conference Publication | IEEE Xplore](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=8809496)
+
+[13] Referenz 13 [The RowHammer Problem and Other Issues We May Face as Memory Becomes Denser] (https://people.inf.ethz.ch/omutlu/pub/rowhammer-and-other-memory-issues_date17.pdf)
 
 [14] Referenz 14 [Understanding Reduced-Voltage Operation  
 in Modern DRAM Devices](https://ghose.web.illinois.edu/papers/17sigmetrics_voltron.pdf)
