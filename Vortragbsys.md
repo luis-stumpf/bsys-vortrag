@@ -67,7 +67,7 @@ lang: de
 
 ### 1. Abstract
 
-Es ist die ominöse Wolkenwand am Horizont: Rowhammer geistert als gewaltige Sicherheitslücke für Hauptspeicher schon länger durch einschlägige Medien und Fachzeitschriften. Zwischenzeitlich schien das Problem sogar überwunden, die Bedenken mehren sich zuletzt allerdings zunehmend. Im folgenden wollen wir zeigen, wie Rowhammer funktioniert und darauf aufbauend: warum es auch in naher Zukunft ein Problem bleiben wird.
+Es ist die ominöse Wolkenwand am Horizont: Rowhammer geistert als gewaltige Sicherheitslücke für Hauptspeicher schon länger durch einschlägige Medien und Fachzeitschriften. Zwischenzeitlich schien das Problem sogar überwunden, die Bedenken mehren sich zuletzt allerdings zunehmend. Im Folgenden wollen wir zeigen, wie Rowhammer funktioniert und darauf aufbauend: Warum es auch in naher Zukunft ein Problem bleiben wird.
 
 ### 2. Grundlagen
 
@@ -107,7 +107,7 @@ Diese machen den Chip i. d. R. nicht unbrauchbar, können aber kleine Lecks veru
 
 Das Prinzip von Rowhammer ist äußerst einfach. Schwache Bits im Speicher sollen gezielt ausgenutzt werden. Über **schnelle Speicherzugriffe des immer selben Speicherbereichs**, wird im Nanosekundenbereich wieder und wieder die gleiche Wort-Leitung (Row) unter Spannung gesetzt. Der Angreifer "hämmert" sozusagen auf eine Reihe ein. Daher der Name *Row-Hammer*.
 
-Durch dieses Hämmern erhöht sich die Chance, das ein "schwaches" Bit nachgibt und ein Leck verursacht deutlich.[4] Im schlimmsten Fall löst das entsprechende Bit dann einen Statuswechsel in einer anderen Reihe aus. Etwas konkreter formuliert: Das Leck kann in einem nahe liegenden Bit eine 0 zu einer 1 machen.
+Durch dieses Hämmern erhöht sich die Chance, dass ein "schwaches" Bit nachgibt und ein Leck verursacht deutlich.[4] Im schlimmsten Fall löst das entsprechende Bit dann einen Statuswechsel in einer anderen Reihe aus. Etwas konkreter formuliert: Das Leck kann in einem nahe liegenden Bit eine 0 zu einer 1 machen.
 
 ##### 3.2 Code
 
@@ -119,7 +119,7 @@ In Zeile 1 und 2 werden Registerinhalte in Reihe X und Y gespeichert. Gleich dar
 
 Das Speichern und Flushen in zwei unterschiedlichen Reihen ist ein kleiner, aber nötiger Umweg, da gängiger RAM eine Reihe zwischenspeichert, um diese nicht wiederholt aufrufen zum müssen.[5] Ohne den abwechselnden Zugriff auf eine andere Reihe würde das System also nur vordergründig Anfragen an die immer gleiche Zeile richten. 
 
-Trotzdem bleibt der Code überraschend einfach. Und fast noch schlimmer: um diesen Code auszuführen, sind keine Root-Rechte notwendig.
+Trotzdem bleibt der Code überraschend einfach. Und fast noch schlimmer: Um diesen Code auszuführen, sind keine Root-Rechte notwendig.
 
 Damit lassen sich Schwachstellen noch nicht gezielt ausnutzen, ein Testprogramm von Google [0] kommt aber bereits mit einigen Hundert Zeilen Code aus. Aktuelle Systeme lassen sich nicht ganz so einfach überlisten. Wichtig ist uns hier einfach zu zeigen, dass Rowhammer auf einem sehr grundlegenden Level agiert. Es nutzt einen Fehler aus, der sich nicht einfach "wegpatchen" lässt.
 
@@ -138,13 +138,13 @@ Ab hier beginnt der kompliziertere Teil des Angriffes. Bis jetzt kann unser Proz
 
 Der Linux-Kernel hat prinzipiell eine sichere Methode, um Speicher zu verwalten. Das System **virtualisiert** den physikalischen Speicher für Nutzer quasi unsichtbar über Soft- und Hardware. [7] Auch andere Betriebssysteme wie Windows und MAC-OS machen sich diesen Trick zunutze. 
 
-Das Betriebssystem teilt den physikalischen Speicher in Seiten (Korrekt eigentlich Seitenrahmen oder rauch Seitenkacheln) und kartiert diese in einem separaten Speicherbereich dem Pagetable. Die Karte für eine solche Seite, im folgenden Pageframe genannt, ist nur für das Betriebssystem sichtbar. Nutzer-Prozessen wird vom Betriebssystem schlicht nicht erlaubt, auf Pageframes zuzugreifen.
+Das Betriebssystem teilt den physikalischen Speicher in Seiten (Korrekt eigentlich Seitenrahmen oder auch Seitenkacheln) und kartiert diese in einem separaten Speicherbereich, dem Pagetable. Die Karte für eine solche Seite, im folgenden Pageframe genannt, ist nur für das Betriebssystem sichtbar. Nutzer-Prozessen wird vom Betriebssystem schlicht nicht erlaubt, auf Pageframes zuzugreifen.
 
-So schützt das Betriebssystem sich selbst und Prozesse voreinander. Sie können nur auf für sie speziell kartierte Bereiche zugreifen. Nachfolgend zeigt sich aber: genau diese Pageframes, also die im Speicher abgelegten Karten können Linux zum Verhängnis werden.
+So schützt das Betriebssystem sich selbst und Prozesse voreinander. Sie können nur auf für sie speziell kartierte Bereiche zugreifen. Nachfolgend zeigt sich aber: Genau diese Pageframes, also die im Speicher abgelegten Karten, können Linux zum Verhängnis werden.
 
 ##### 4.2 Der Pagetable als Achillesverse (Schritt für Schritt-Anleitung)
 
-Der Schutz von Speicher gegen bösartige Prozesse basiert im Grunde genommen darauf, dass Prozesse ihren eigenen Pagetable nicht verändern können, weil dieser außerhalb des für sie kartierten Bereiches liegt. Hier schlagen wir Schritt für Schritt eine Bresche in das schöne Sicherheitskonstrukt und beschreiben eine Attacke aus Sicht des Angreifers. Um das Beispiel zu vereinfachen, nehmen wir an, dass der physikalische Speicher von Betriebsystem-Daten abgesehen leer ist.
+Der Schutz von Speicher gegen bösartige Prozesse basiert im Grunde genommen darauf, dass Prozesse ihren eigenen Pagetable nicht verändern können, weil dieser außerhalb des für sie kartierten Bereiches liegt. Hier schlagen wir Schritt für Schritt eine Bresche in das schöne Sicherheitskonstrukt und beschreiben eine Attacke aus Sicht des Angreifers. Um das Beispiel zu vereinfachen nehmen wir an, dass der physikalische Speicher, von Betriebsystem-Daten abgesehen, leer ist.
 
 <u>Schritt 1</u>:
 
@@ -154,7 +154,7 @@ Wir starten unser bösartiges Programm und erstellen einen geteilten Speicherber
 
 Das Programm allokiert mit dem Systemaufruf mmap() [9] immer wieder denselben Speicher. Es befindet sich also weiter **nur eine Page** im physikalischen Speicher.
 
-**ABER**: Jedes Mapping erhält einen eigenen Pagetable für den geteilten Speicherbereich. Der Speicher wir regelrecht mit Pagetables **zugepflastert**. Diese benötigen zugegeben nicht sonderlich viel Speicher (z.B. 4 kB)[8]. Werden wie in unserem Beispiel allerdings Millionen von Pagetables angelegt, füllt das den Speicher schnell. (Abb. 5)
+Jedes Mapping erhält einen eigenen Pagetable für den geteilten Speicherbereich. Der Speicher wird regelrecht mit Pagetables **zugepflastert**. Diese benötigen zugegeben nicht sonderlich viel Speicher (z.B. 4 kB)[8]. Werden wie in unserem Beispiel allerdings Millionen von Pagetables angelegt, füllt das den Speicher schnell. (Abb. 5)
 
 <u>Schritt 3</u>: 
 
@@ -172,19 +172,19 @@ Und noch besser: Weil der komplette Speicher ja immer noch voller Pagetables ist
 
 Wir haben Schreib- und Lesezugriff auf einen Pagetable und das im User-Mode. Damit können wir den Pagetable ohne Probleme den kompletten physikalischen Speicher kartieren lassen. Das System gehört praktisch uns.
 
-Die Vorgehensweise ist hier natürlich sehr vereinfacht dargestellt. Die Suche nach schwachen Bits und das erkennen der richtigen Tables, sowie das korrekte Allokieren und teilweise Freigeben von Speicher brauchen entsprechende Vorbereitung und Fachwissen.
+Die Vorgehensweise ist hier natürlich sehr vereinfacht dargestellt. Die Suche nach schwachen Bits und das Erkennen der richtigen Tables, sowie das korrekte Allokieren und teilweise Freigeben von Speicher brauchen entsprechende Vorbereitung und Fachwissen.
 
-### 5. Rowahmmer in der Realität
+### 5. Rowhammer in der Realität
 
 Der beschriebene Angriff auf das Linux-System ist für Hacker natürlich nur bedingt nutzbar. Der Angreifer muss lokal ein Programm einschleusen. Allerdings können Angriffe nachgewiesenermaßen sehr vielseitig erfolgen. Wir führen als Beispiel zwei mögliche "Eintritts-Punkte" auf.
 
 ##### 5.1 Throwhammer: Eine Rowhammer-Attacke über Netzwerke
 
-Ganz allgemein lässt sich Rowhammer nur dann ausnutzen, wenn ein Angreifer mehr oder weniger direkt Prozesse starten und Speicher anfordern kann. Im Gegensatz zu lese- und Schreibzugriffen im Hauptspeicher sind Netzwerk-Anfragen geradezu lachhaft langsam. 
+Ganz allgemein lässt sich Rowhammer nur dann ausnutzen, wenn ein Angreifer mehr oder weniger direkt Prozesse starten und Speicher anfordern kann. Im Gegensatz zu Lese- und Schreibzugriffen im Hauptspeicher sind Netzwerk-Anfragen geradezu lachhaft langsam. 
 
 Das heißt allerdings keineswegs, dass Rowhammer-Attacken von einem "Außenstehenden" nicht möglich sind. Rowhammer kann "remote" z.B. gegen Cloud-Services eingesetzt werden und ganz treffend wird diese Methode dann auch **Throw**-Hammer genannt.[15]
 
-Um eine Throwhammer Attacke zu ermöglichen, braucht das Zielsystem eine Netzwerkanbindung mit einer Geschwindigkeit von mindest 10 Gigabit pro Sekunde. Das ist heutzutage keine Seltenheit mehr.[15] Gerade bei älteren Speicher-Systemen braucht der Angreifer nur einen normalen User-Zugang ohne besondere Rechte.
+Um eine Throwhammer Attacke zu ermöglichen, braucht das Zielsystem eine Netzwerkanbindung mit einer Geschwindigkeit von mindestens 10 Gigabit pro Sekunde. Das ist heutzutage keine Seltenheit mehr.[15] Gerade bei älteren Speicher-Systemen braucht der Angreifer nur einen normalen User-Zugang ohne besondere Rechte.
 
 Auf der Serverseite allokiert der "Hacker" dann einfach einen zusammenhängenden Speicher-Bereich und füllt diesen wiederholt mit Nullen oder Einsen. Währenddessen wird überprüft, ob ein Bit im allokierten Speicher "flippt". Gibt ein Bit nach, lässt sich so auch in Speicherbereiche schreiben, auf die ein Nutzer keinen Zugriff haben sollte. Allerdings ist hier eine gewisse Kenntnis über das System nötig, da der Nutzer Speicher "intelligent" allokieren und freigeben muss.[15]
 
@@ -192,9 +192,9 @@ Fazit: Sensible Daten nur auf dem eigenen Server, oder auf Servern die nicht "je
 
 ##### 5.2 Jackhammer: Eine Rowhammer-Attacke über Websites (Rowhammer.js)
 
-Auch Attacken auf Heimcomputer sind nicht unmöglich. Hier dient, dass bei Programmierern äußerst beliebte Java-Script einmal mehr als Ansetzpunkt für unser virtuelles Brecheisen. 
+Auch Attacken auf Heimcomputer sind nicht unmöglich. Hier dient, das bei Programmierern äußerst beliebte Java-Script einmal mehr als Ansetzpunkt für unser virtuelles Brecheisen. 
 
-Die Programmiersprache Javascript hat zwar zunächst keine Möglichkeit, Pointer und virtuelle Adressen anzusprechen. Kann sich aber sehr große Arrays generieren lassen. Diese werden auf allen aktuellen Google-Chrome- und Firefox-Browser in einem Linux System als 2-MB-Pages allokiert. Verantwortung trägt hier das Betriebssystem. Die Methode wird bei jeder Scriptsprache so angewendet.[16] Ein bösartiges Skript kann so wiederholt in hoher Frequenz über die Arrays iterieren und damit auch von einer Website aus auf Reihen einhämmern, ergo ein Bit zum Kippen bringen. Ab hier geht ein Angreifer wieder nach dem bereits bekannten Konzept vor. 
+Die Programmiersprache Javascript hat zwar zunächst keine Möglichkeit, Pointer und virtuelle Adressen anzusprechen, kann sich aber sehr große Arrays generieren lassen. Diese werden auf allen aktuellen Google-Chrome- und Firefox-Browsern in einem Linux System als 2-MB-Pages allokiert. Verantwortung trägt hier das Betriebssystem. Die Methode wird bei jeder Scriptsprache so angewendet.[16] Ein bösartiges Skript kann so wiederholt in hoher Frequenz über die Arrays iterieren und damit auch von einer Website aus auf Reihen einhämmern, ergo ein Bit zum Kippen bringen. Ab hier geht ein Angreifer wieder nach dem bereits bekannten Konzept vor. 
 
 Der springende Punkt: Ein Angriff startet auf dem Heimcomputer direkt beim Aufrufen einer bösartigen Webseite und ist als solcher auch nicht einfach zu erkennen. 
 
@@ -204,11 +204,11 @@ Immerhin können sich auch Heimcomputer-Nutzer denkbar einfach schützen. In all
 
 Ab hier kommen wir in den Bereich, wo auch Mutmaßungen eine gewisse Rolle spielen. Viele Autoren, die sich jüngst mit Rowhammer befasst haben, bezweifeln, dass sich Systeme aktuell mit vollkommener Sicherheit schützen lassen.[10] Das liegt auch daran, dass ein bekanntes Schutz-Konzept Systeme langsamer macht und deshalb nicht immer praktikabel wäre.
 
-Zudem ist kein bösartiger Rowhammer-Angriff öffentlich bekannt, eine unmittelbare Gefahr und damit auch sofortiger Handlungsbedarf besteht also (scheinbar) nicht. Unsere Nachfolgenden Lösungsbeispiele haben wir an die Vorschläge im Bericht: 'Flipping Bits in Memory without accsessing them' von [5] angelehnt. 
+Zudem ist kein bösartiger Rowhammer-Angriff öffentlich bekannt, eine unmittelbare Gefahr und damit auch sofortiger Handlungsbedarf besteht also (scheinbar) nicht. Unsere nachfolgenden Lösungsbeispiele haben wir an die Vorschläge im Bericht: 'Flipping Bits in Memory without accsessing them' von [5] angelehnt. 
 
 ##### 6.1 ECC (Error-Correction-Code)
 
-Die denkbar idealste Lösung für das Rowhammer-Problem wäre, schlicht **bessere Chips** zu bauen. Ohne "schwache" Bits oder mit besserer Kontrolle haben Angreifer keinen Hebel. Theoretisch lässt sich RAM auf fehlerhafte Bits überprüfen, welche dann ersetz werden können. Dies macht die Herstellung allerdings wesentlich aufwendiger und daher impraktikabel. [5],[11]
+Die denkbar idealste Lösung für das Rowhammer-Problem wäre, schlicht **bessere Chips** zu bauen. Ohne "schwache" Bits oder mit besserer Kontrolle haben Angreifer keinen Hebel. Theoretisch lässt sich RAM auf fehlerhafte Bits überprüfen, welche dann ersetzt werden können. Dies macht die Herstellung allerdings wesentlich aufwendiger und daher impraktikabel. [5],[11]
 
 Ein gutes Beispiel für eine Lösung ist die bereits in manchen RAM Bausteinen verwendete **ECC-Methode**. Das Error-Corretion-Code-Verfahren verwendet einen Hashwert zur Identifikation von Ein- , Zwei- und teilweise auch Mehr-Bit-Fehlern. Für dieses Verfahren werden 72 statt den üblichen 64 Bits für jede Speicherzelle benötigt.[12] Da aber auch ECC nicht sämtliche Fehler ausmerzt, bietet es keinen optimalen Schutz. Auch-ECC-Systeme wurden bereits nachweislich mit Rowhammering "geknackt".[10]
 
@@ -218,7 +218,7 @@ Immerhin: Ein bisschen mehr Schutz ist besser als gar keiner. Einfache Rowhammer
 
 Noch ein Ansatz für bessern Schutz wäre das **Erhöhen** der sogenannten **Refresh-Rate** innerhalb der Hardware.
 
-In Kürze: D-RAM-Bits verlieren ihre Ladung und müssen daher in sehr kurzen Zeitabständen ausgelesen- und wieder geladen werden. D-RAM-Bausteine werden typischerweise alle paar Dutzend Millisekunden aufgefrischt.[14] Der Rowhammer-Angriff **muss innerhalb einer Refresh-Periode abgeschlossen sein**, da die Bits ansonsten wieder ordnungsgemäß geladen sind.
+In Kürze: D-RAM-Bits verlieren ihre Ladung und müssen daher in sehr kurzen Zeitabständen ausgelesen und wieder geladen werden. D-RAM-Bausteine werden typischerweise alle paar Dutzend Millisekunden aufgefrischt.[14] Der Rowhammer-Angriff **muss innerhalb einer Refresh-Periode abgeschlossen sein**, da die Bits ansonsten wieder ordnungsgemäß geladen sind.
 
 Im Prinzip reicht die Zeit in einem typischen Refresh-Zyklus für mehr als eine Million Speicherinstruktionen. Wird die Refresh-Rate allerdings erhöht, sinkt auch die Chance darauf, dass ein "schwaches" Bit rechtzeitig nachgibt (Abbildung 7).
 
