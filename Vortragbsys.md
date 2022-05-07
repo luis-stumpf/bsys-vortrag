@@ -19,52 +19,6 @@ lang: de
 
 # Rowhammer: Problem ohne Lösung
 
-### Inhalt
-
-1. Abstract
-
-2. Grundlagen
-   
-   1. Einleitung: Der Speicher als Fehler
-   
-   2. Dynamic Random Access Memory -DRAM
-   
-   3. Das Problem mit der Grösse
-
-3. Rowhammer
-   
-   1. Die Idee
-   
-   2. Code
-   
-   3. Systemschwächen ausnutzen
-
-4. Von der Theorie zur Praxis: Angriff auf den Linux-Kernel
-   
-   1. Linux Speicherschutz durch Virtualisierung
-   
-   2. Der Page-Table als Achillesverse
-
-5. Rowhammer in der Realität
-   
-   1. Throwhammer: Eine Rowhammer-Attacke über Netzwerke
-   
-   2. Jackhammer: Eine Rowhammer-Attacke über Websites
-
-6. Schutz gegen Rowhammer
-   
-   1. ECC
-   
-   2. Refresh-Rate
-
-7. Fazit
-
-8. Anhang
-
-9. Referenzen
-
- 
-
 ### 1. Abstract
 
 Es ist die ominöse Wolkenwand am Horizont: Rowhammer geistert als gewaltige Sicherheitslücke für Hauptspeicher schon länger durch einschlägige Medien und Fachzeitschriften. Zwischenzeitlich schien das Problem sogar überwunden, die Bedenken mehren sich zuletzt allerdings zunehmend. Im Folgenden wollen wir zeigen, wie Rowhammer funktioniert und darauf aufbauend: Warum es auch in naher Zukunft ein Problem bleiben wird.
@@ -89,7 +43,7 @@ Wenn in ein Bit geschrieben werden soll, muss die Wort-Leitung nur Spannung auf 
 
 Bereits die kleinsten Bausteine enthalten über 1000 Speicherzellen in einer Matrix. In Abbildung zwei wird ein Zugriff in einer solchen Matrix vereinfacht dargestellt.
 
-![Abbildung 2 vereinfachte Matrix-Darstellung der Bits](res/Abb2Markdown.PNG "Matrix-Darstellungder Bits"){width=80%}
+![vereinfachte Matrix-Darstellung der Bits](res/Abb2Markdown.PNG "Matrix-Darstellungder Bits"){width=80%}
 
 ##### 2.3 Das Problem mit der Grösse
 
@@ -123,8 +77,7 @@ Trotzdem bleibt der Code überraschend einfach. Und fast noch schlimmer: Um dies
 
 Damit lassen sich Schwachstellen noch nicht gezielt ausnutzen, ein Testprogramm von Google [0] kommt aber bereits mit einigen Hundert Zeilen Code aus. Aktuelle Systeme lassen sich nicht ganz so einfach überlisten. Wichtig ist uns hier einfach zu zeigen, dass Rowhammer auf einem sehr grundlegenden Level agiert. Es nutzt einen Fehler aus, der sich nicht einfach "wegpatchen" lässt.
 
-![*RowHammer error rate vs. manufacturing dates of 129  
-DRAM modules we tested.* Aus RowHammer: a Retrospektive [4],[5](Die Namen der Hersteller wurden anonymisiert)](res/Abb5Markdown.PNG "Rowhammer error rate vs manufacturing dates"){width=50%}
+![*RowHammer error rate vs. manufacturing dates of 129 DRAM modules we tested.* Aus RowHammer: a Retrospektive [4],[5](Die Namen der Hersteller wurden anonymisiert)](res/Abb5Markdown.PNG "Rowhammer error rate vs manufacturing dates"){width=50%}
 
 Abbildung 5 zeigt elementar, dass die Anzahl der anfälligen Bits in Speicherblöcken bis etwa 2012 aufgrund der zunehmenden Dichte immer weiter zugenommen hat. Je näher die Bits also zusammenliegen, umso anfälliger sind sie für Rowhammering. Den Abwärtstrend in späteren Jahren thematisieren wir in einem der nachfolgenden Kapitel.
 
@@ -242,15 +195,15 @@ Google hat einen Row-Hammer-Test für x86-Computer als Open-Source-Projekt verö
 
 [0] Referenz 0 [GitHub - google/rowhammer-test: Test DRAM for bit flips caused by the rowhammer problem](https://github.com/google/rowhammer-test)
 
-[1] Referenz 1[DRAM Circuit Design: Fundamental and High-Speed Topics - Brent Keeth, R. Jacob Baker, Brian Johnson, Feng Lin - Google Books](https://books.google.de/books?id=TgW3LTubREQC&pg=PA33&hl=de&source=gbs_toc_r&cad=3#v=onepage&q&f=false)
+[1] Referenz 1 [DRAM Circuit Design: Fundamental and High-Speed Topics - Brent Keeth, R. Jacob Baker, Brian Johnson, Feng Lin - Google Books](https://books.google.de/books?id=TgW3LTubREQC&pg=PA33&hl=de&source=gbs_toc_r&cad=3#v=onepage&q&f=false)
 
-[2] Referenz 2[Towards Terabit Memories | Chips 2020](https://www.chips2020.net/chapter/towards-terabit-memories)
+[2] Referenz 2 [Towards Terabit Memories | Chips 2020](https://www.chips2020.net/chapter/towards-terabit-memories)
 
-[3] Referenz 3  [[Chips 2020 | SpringerLink](https://link.springer.com/book/10.1007/978-3-642-23096-7)]
+[3] Referenz 3  [Chips 2020 | SpringerLink](https://link.springer.com/book/10.1007/978-3-642-23096-7)
 
-[4] Referenz 4 [[[1904.09724] RowHammer: A Retrospective](https://arxiv.org/abs/1904.09724)]
+[4] Referenz 4 [[1904.09724] RowHammer: A Retrospective](https://arxiv.org/abs/1904.09724)
 
-[5] Referenz 5 [[Flipping bits in memory without accessing them: An experimental study of DRAM disturbance errors | IEEE Conference Publication | IEEE Xplore](https://ieeexplore.ieee.org/document/6853210)]
+[5] Referenz 5 [Flipping bits in memory without accessing them: An experimental study of DRAM disturbance errors | IEEE Conference Publication | IEEE Xplore](https://ieeexplore.ieee.org/document/6853210)
 
 [6] Referenz 6 [Into the Void: x86 Instruction Set Reference](https://c9x.me/x86/html/file_module_x86_id_30.html)
 
@@ -266,7 +219,7 @@ Google hat einen Row-Hammer-Test für x86-Computer als Open-Source-Projekt verö
 
 [12] Referenz 12 [Understanding and Modeling On-Die Error Correction in Modern DRAM: An Experimental Study Using Real Devices | IEEE Conference Publication | IEEE Xplore](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=8809496)
 
-[13] Referenz 13 [The RowHammer Problem and Other Issues We May Face as Memory Becomes Denser] (https://people.inf.ethz.ch/omutlu/pub/rowhammer-and-other-memory-issues_date17.pdf)
+[13] Referenz 13 [The RowHammer Problem and Other Issues We May Face as Memory Becomes Denser](https://people.inf.ethz.ch/omutlu/pub/rowhammer-and-other-memory-issues_date17.pdf)
 
 [14] Referenz 14 [Understanding Reduced-Voltage Operation  
 in Modern DRAM Devices](https://ghose.web.illinois.edu/papers/17sigmetrics_voltron.pdf)
